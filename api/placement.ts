@@ -1,11 +1,13 @@
-import Anthropic from '@anthropic-ai/sdk'
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
+  }
+
+  const key = process.env.ANTHROPIC_API_KEY
+  if (!key) {
+    return res.status(500).json({ error: 'ANTHROPIC_API_KEY is not set' })
   }
 
   const { works, room, locked = [] } = req.body
@@ -18,17 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ? `\nLOCKED PLACEMENTS (do not move these):\n${JSON.stringify(locked, null, 2)}\n`
     : ''
 
-  try {
-    const response = await client.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 1024,
-      system: `You are a gallery curator and installation designer.
-Arrange photographic prints for maximum visual impact.
-Return ONLY valid JSON — no preamble, no markdown, no code fences.`,
-      messages: [
-        {
-          role: 'user',
-          content: `
+  const prompt = `
 GALLERY SPACE:
 ${JSON.stringify(room, null, 2)}
 ${lockedSection}
@@ -60,21 +52,38 @@ Return exactly:
   ],
   "curatorial_note": "<one paragraph, 2–4 sentences describing the hang logic>"
 }
-          `.trim(),
-        },
-      ],
+  `.trim()
+
+  try {
+    const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-3-5-sonnet-20241022',
+        max_tokens: 1024,
+        system: 'You are a gallery curator and installation designer. Arrange photographic prints for maximum visual impact. Return ONLY valid JSON — no preamble, no markdown, no code fences.',
+        messages: [{ role: 'user', content: prompt }],
+      }),
     })
 
-    const text = response.content[0].type === 'text' ? response.content[0].text : ''
+    const json = await apiRes.json()
+
+    if (!apiRes.ok) {
+      return res.status(500).json({ error: json.error?.message ?? `Anthropic ${apiRes.status}` })
+    }
+
+    const text: string = json.content?.[0]?.text ?? ''
 
     try {
-      const parsed = JSON.parse(text)
-      res.json(parsed)
+      res.json(JSON.parse(text))
     } catch {
       res.status(500).json({ error: 'Parse failed', raw: text })
     }
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    res.status(500).json({ error: message })
+    res.status(500).json({ error: err instanceof Error ? err.message : String(err) })
   }
 }
