@@ -18,16 +18,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ? `\nLOCKED PLACEMENTS (do not move these):\n${JSON.stringify(locked, null, 2)}\n`
     : ''
 
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 1024,
-    system: `You are a gallery curator and installation designer.
+  try {
+    const response = await client.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1024,
+      system: `You are a gallery curator and installation designer.
 Arrange photographic prints for maximum visual impact.
 Return ONLY valid JSON — no preamble, no markdown, no code fences.`,
-    messages: [
-      {
-        role: 'user',
-        content: `
+      messages: [
+        {
+          role: 'user',
+          content: `
 GALLERY SPACE:
 ${JSON.stringify(room, null, 2)}
 ${lockedSection}
@@ -59,18 +60,21 @@ Return exactly:
   ],
   "curatorial_note": "<one paragraph, 2–4 sentences describing the hang logic>"
 }
-        `.trim(),
-      },
-    ],
-  })
+          `.trim(),
+        },
+      ],
+    })
 
-  const text =
-    response.content[0].type === 'text' ? response.content[0].text : ''
+    const text = response.content[0].type === 'text' ? response.content[0].text : ''
 
-  try {
-    const parsed = JSON.parse(text)
-    res.json(parsed)
-  } catch {
-    res.status(500).json({ error: 'Parse failed', raw: text })
+    try {
+      const parsed = JSON.parse(text)
+      res.json(parsed)
+    } catch {
+      res.status(500).json({ error: 'Parse failed', raw: text })
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    res.status(500).json({ error: message })
   }
 }
