@@ -56,9 +56,9 @@ export function PlacementPanel() {
           locked: lockedPlacements,
         }),
       })
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
-      if (data.error) throw new Error(data.error)
+      if (!res.ok || data.error) throw new Error(data.error ?? `HTTP ${res.status}`)
+
       setPlacements(data.placements)
       setCuratorialNote(data.curatorial_note)
     } catch (e) {
