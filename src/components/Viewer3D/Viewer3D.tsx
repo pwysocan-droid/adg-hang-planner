@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { ROOM } from '../../lib/room'
 import { useStore } from '../../store/useStore'
 import { buildRoom } from '../../lib/three/scene'
 import { createArtworkMesh } from '../../lib/three/artwork'
@@ -40,8 +41,8 @@ export function Viewer3D() {
     sceneRef.current = scene
 
     const camera = new THREE.PerspectiveCamera(60, w / h, 0.1, 200)
-    camera.position.set(9.66, 6, -8)
-    camera.lookAt(9.66, 4.75, 7.25)
+    camera.position.set(ROOM.width / 2, 8.5, 12)
+    camera.lookAt(ROOM.width / 2, 3.5, 0)
     cameraRef.current = camera
 
     const controls = new OrbitController(camera, renderer.domElement)

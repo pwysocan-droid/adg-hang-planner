@@ -8,47 +8,50 @@ export interface CameraPreset {
   target: THREE.Vector3
 }
 
+// All positions are INSIDE the room.
+// Coordinate system: origin = SW corner, X = east, Z = north, Y = up.
 export const CAMERA_PRESETS: CameraPreset[] = [
   {
     id: 'overview',
     label: 'Overview',
-    position: new THREE.Vector3(ROOM.width / 2, 6, -8),
-    target: new THREE.Vector3(ROOM.width / 2, ROOM.eyeLevel, ROOM.depth / 2),
+    position: new THREE.Vector3(ROOM.width / 2, 8.5, 12),
+    target: new THREE.Vector3(ROOM.width / 2, 3.5, 0),
   },
   {
     id: 'south',
     label: 'South',
-    position: new THREE.Vector3(ROOM.width / 2, ROOM.eyeLevel, -4),
+    position: new THREE.Vector3(ROOM.width / 2, ROOM.eyeLevel, 10),
     target: new THREE.Vector3(ROOM.width / 2, ROOM.eyeLevel, 0),
   },
   {
     id: 'east',
     label: 'East',
-    position: new THREE.Vector3(ROOM.width + 4, ROOM.eyeLevel, ROOM.depth / 2),
-    target: new THREE.Vector3(ROOM.width, ROOM.eyeLevel, ROOM.depth / 2),
+    // South portion of east wall (avoid window zone z>9.5)
+    position: new THREE.Vector3(5, ROOM.eyeLevel, 4),
+    target: new THREE.Vector3(ROOM.width, ROOM.eyeLevel, 4),
   },
   {
     id: 'west',
     label: 'West',
-    position: new THREE.Vector3(-4, ROOM.eyeLevel, ROOM.depth / 2),
-    target: new THREE.Vector3(0, ROOM.eyeLevel, ROOM.depth / 2),
+    position: new THREE.Vector3(14, ROOM.eyeLevel, 4),
+    target: new THREE.Vector3(0, ROOM.eyeLevel, 4),
   },
   {
     id: 'column',
     label: 'Column',
-    position: new THREE.Vector3((ROOM.column.xStart + ROOM.column.xEnd) / 2, ROOM.eyeLevel, ROOM.column.depth + 4),
+    position: new THREE.Vector3((ROOM.column.xStart + ROOM.column.xEnd) / 2, ROOM.eyeLevel, 6),
     target: new THREE.Vector3((ROOM.column.xStart + ROOM.column.xEnd) / 2, ROOM.eyeLevel, ROOM.column.depth),
   },
   {
     id: 'north-left',
     label: 'N–Left',
-    position: new THREE.Vector3(1.65, ROOM.eyeLevel, ROOM.depth + 4),
+    position: new THREE.Vector3(1.65, ROOM.eyeLevel, 9),
     target: new THREE.Vector3(1.65, ROOM.eyeLevel, ROOM.depth),
   },
   {
     id: 'north-right',
     label: 'N–Right',
-    position: new THREE.Vector3(17.6, ROOM.eyeLevel, ROOM.depth + 4),
+    position: new THREE.Vector3(17.6, ROOM.eyeLevel, 9),
     target: new THREE.Vector3(17.6, ROOM.eyeLevel, ROOM.depth),
   },
 ]
@@ -64,7 +67,7 @@ export class OrbitController {
     private camera: THREE.PerspectiveCamera,
     private domElement: HTMLElement
   ) {
-    this.target = new THREE.Vector3(ROOM.width / 2, ROOM.eyeLevel, ROOM.depth / 2)
+    this.target = new THREE.Vector3(ROOM.width / 2, 3.5, 0)
     this.updateSpherical()
     this.bind()
   }
@@ -101,18 +104,15 @@ export class OrbitController {
     this.lastMouse.set(e.clientX, e.clientY)
 
     if (this.isShiftDragging) {
-      // Pan
       const right = new THREE.Vector3()
       const up = new THREE.Vector3()
       this.camera.getWorldDirection(right)
       right.cross(this.camera.up).normalize()
       up.copy(this.camera.up)
-
       const panSpeed = 0.02
       this.target.addScaledVector(right, -dx * panSpeed)
       this.target.addScaledVector(up, dy * panSpeed)
     } else {
-      // Orbit
       this.spherical.theta -= dx * 0.01
       this.spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, this.spherical.phi + dy * 0.01))
     }

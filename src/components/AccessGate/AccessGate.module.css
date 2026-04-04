@@ -1,0 +1,74 @@
+.screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ground);
+}
+
+.form {
+  border: 2px solid var(--ink);
+  padding: 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 300px;
+}
+
+.title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sub {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: -6px;
+}
+
+.rule {
+  height: 1px;
+  background: var(--rule);
+}
+
+.label {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.input {
+  border: 1px solid var(--rule);
+  background: var(--ground);
+  padding: 7px 8px;
+  width: 100%;
+  font-size: 12px;
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--ink);
+}
+
+.inputError {
+  border-color: var(--accent) !important;
+}
+
+.error {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: -6px;
+}
+
+.btn {
+  align-self: flex-end;
+  margin-top: 4px;
+}
