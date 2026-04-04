@@ -1,0 +1,36 @@
+.panel {
+  padding: 10px 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.left {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.step {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+}
+
+.heading {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

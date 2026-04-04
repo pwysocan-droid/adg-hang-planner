@@ -1,0 +1,90 @@
+:root {
+  --ground: #F4F2EC;
+  --ink:    #0A0A08;
+  --accent: #E8280A;
+  --muted:  rgba(10, 10, 8, 0.35);
+  --rule:   rgba(10, 10, 8, 0.15);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+input, button, textarea, select {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--ink);
+}
+
+button {
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--ink);
+  padding: 6px 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 9px;
+  transition: background 0.1s, color 0.1s;
+}
+
+button:hover {
+  background: var(--ink);
+  color: var(--ground);
+}
+
+button.accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--ground);
+}
+
+button.accent:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+input[type="text"],
+input[type="number"] {
+  border: 1px solid var(--rule);
+  background: var(--ground);
+  padding: 4px 6px;
+  width: 100%;
+  outline: none;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: var(--ink);
+}
+
+.label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.section-heading {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink);
+}

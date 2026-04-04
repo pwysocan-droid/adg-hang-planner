@@ -1,0 +1,39 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.canvas {
+  height: 60vh;
+  min-height: 360px;
+  width: 100%;
+  background: var(--ground);
+  cursor: grab;
+}
+
+.canvas:active {
+  cursor: grabbing;
+}
+
+.presets {
+  display: flex;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  overflow-x: auto;
+}
+
+.presetBtn {
+  border: none;
+  border-right: 1px solid var(--rule);
+  padding: 7px 12px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  flex-shrink: 0;
+  background: transparent;
+  color: var(--muted);
+}
+
+.presetBtn:hover {
+  background: rgba(10, 10, 8, 0.05);
+  color: var(--ink);
+}
