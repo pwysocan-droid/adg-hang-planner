@@ -8,66 +8,69 @@ function genId() { return `work-${++idCounter}` }
 
 function WorkCard({ work }: { work: Work }) {
   const { updateWork, removeWork } = useStore()
-  const [editing, setEditing] = useState(false)
   const [title, setTitle] = useState(work.title)
   const [w, setW] = useState(String(work.widthIn))
   const [h, setH] = useState(String(work.heightIn))
 
-  function save() {
-    updateWork(work.id, {
-      title: title || 'Untitled',
-      widthIn: parseFloat(w) || work.widthIn,
-      heightIn: parseFloat(h) || work.heightIn,
-    })
-    setEditing(false)
+  function commitTitle() {
+    updateWork(work.id, { title: title || 'Untitled' })
+  }
+
+  function commitDims() {
+    const wVal = parseFloat(w)
+    const hVal = parseFloat(h)
+    if (wVal > 0) updateWork(work.id, { widthIn: wVal })
+    if (hVal > 0) updateWork(work.id, { heightIn: hVal })
   }
 
   return (
     <div className={styles.card}>
-      {work.imageUrl ? (
-        <img src={work.imageUrl} className={styles.thumb} alt={work.title} />
-      ) : (
-        <div className={styles.placeholder} />
-      )}
+      {work.imageUrl
+        ? <img src={work.imageUrl} className={styles.thumb} alt={work.title} />
+        : <div className={styles.placeholder} />
+      }
 
-      {editing ? (
-        <div className={styles.editForm}>
-          <input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Title"
-            className={styles.titleInput}
-          />
-          <div className={styles.dimRow}>
+      <div className={styles.fields}>
+        <input
+          className={styles.titleInput}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          onBlur={commitTitle}
+          onKeyDown={(e) => e.key === 'Enter' && commitTitle()}
+          placeholder="Title"
+        />
+
+        <div className={styles.dimRow}>
+          <div className={styles.dimField}>
+            <span className={styles.dimLabel}>W</span>
             <input
               type="number"
+              className={styles.dimInput}
               value={w}
+              min="1"
               onChange={(e) => setW(e.target.value)}
-              className={styles.dimInput}
+              onBlur={commitDims}
+              onKeyDown={(e) => e.key === 'Enter' && commitDims()}
             />
-            <span className={styles.dimSep}>×</span>
+          </div>
+          <span className={styles.dimSep}>×</span>
+          <div className={styles.dimField}>
+            <span className={styles.dimLabel}>H</span>
             <input
               type="number"
-              value={h}
-              onChange={(e) => setH(e.target.value)}
               className={styles.dimInput}
+              value={h}
+              min="1"
+              onChange={(e) => setH(e.target.value)}
+              onBlur={commitDims}
+              onKeyDown={(e) => e.key === 'Enter' && commitDims()}
             />
-            <span className={styles.dimUnit}>in</span>
           </div>
-          <button onClick={save} className={styles.saveBtn}>Save</button>
+          <span className={styles.dimUnit}>in</span>
         </div>
-      ) : (
-        <div className={styles.meta}>
-          <div className={styles.workTitle}>{work.title}</div>
-          <div className={styles.dims}>
-            {work.widthIn}" × {work.heightIn}"
-          </div>
-          <div className={styles.actions}>
-            <button onClick={() => setEditing(true)} className={styles.iconBtn}>✎</button>
-            <button onClick={() => removeWork(work.id)} className={styles.iconBtn}>✕</button>
-          </div>
-        </div>
-      )}
+      </div>
+
+      <button onClick={() => removeWork(work.id)} className={styles.removeBtn}>✕</button>
     </div>
   )
 }
@@ -83,7 +86,6 @@ export function WorksPanel() {
       if (!file.type.match(/image\//)) return
       const url = URL.createObjectURL(file)
       const name = file.name.replace(/\.[^.]+$/, '')
-      // Try to parse dimensions from filename e.g. "portrait_24x30"
       const dimMatch = name.match(/(\d+)\s*[xX×]\s*(\d+)/)
       const work: Work = {
         id: genId(),
@@ -128,7 +130,7 @@ export function WorksPanel() {
       </div>
 
       {works.length > 0 && (
-        <div className={styles.grid}>
+        <div className={styles.list}>
           {works.map((w) => <WorkCard key={w.id} work={w} />)}
         </div>
       )}
