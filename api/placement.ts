@@ -63,7 +63,7 @@ Return exactly:
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-3-haiku-20240307',
         max_tokens: 1024,
         system: 'You are a gallery curator and installation designer. Arrange photographic prints for maximum visual impact. Return ONLY valid JSON — no preamble, no markdown, no code fences.',
         messages: [{ role: 'user', content: prompt }],
