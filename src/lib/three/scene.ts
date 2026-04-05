@@ -3,13 +3,12 @@ import { ROOM } from '../room'
 
 export function buildRoom(scene: THREE.Scene) {
   // Each surface gets its own tone to read as a distinct plane under light
-  const southMat  = new THREE.MeshLambertMaterial({ color: 0xf5f3ed }) // hero — brightest
-  const northMat  = new THREE.MeshLambertMaterial({ color: 0xe8e5de }) // back — darker
-  const eastMat   = new THREE.MeshLambertMaterial({ color: 0xeeeae3 }) // side
-  const westMat   = new THREE.MeshLambertMaterial({ color: 0xeae7e0 }) // side
-  const colMat    = new THREE.MeshLambertMaterial({ color: 0xedeae3 }) // column
-  const floorMat  = new THREE.MeshLambertMaterial({ color: 0xb8b4ae }) // polished concrete — dark
-  const ceilMat   = new THREE.MeshLambertMaterial({ color: 0xfafaf8 }) // white ceiling — lightest
+  const southMat  = new THREE.MeshLambertMaterial({ color: 0xfaf9f6 }) // hero — near white
+  const northMat  = new THREE.MeshLambertMaterial({ color: 0xd8d4cc }) // back — clearly darker
+  const eastMat   = new THREE.MeshLambertMaterial({ color: 0xf0ece4 }) // side
+  const westMat   = new THREE.MeshLambertMaterial({ color: 0xeceae2 }) // side
+  const floorMat  = new THREE.MeshLambertMaterial({ color: 0xa8a49e }) // polished concrete
+  const ceilMat   = new THREE.MeshLambertMaterial({ color: 0xffffff }) // white ceiling
 
   // Floor
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(ROOM.width, ROOM.depth), floorMat)
@@ -91,38 +90,38 @@ export function buildRoom(scene: THREE.Scene) {
   }
 
   // Lighting — layered for spatial depth
-  // Low ambient so surfaces don't flatten out
-  scene.add(new THREE.AmbientLight(0xfff8f0, 0.35))
+  // Strong ambient — baseline brightness so nothing goes black
+  scene.add(new THREE.AmbientLight(0xfff8f0, 0.8))
 
-  // Main overhead fill — warm, from above centre
-  const overhead = new THREE.DirectionalLight(0xfff5e8, 0.6)
-  overhead.position.set(ROOM.width / 2, ROOM.ceilingH, ROOM.depth / 2)
+  // Key from south — blasts the south wall bright, camera faces it
+  const keyLight = new THREE.DirectionalLight(0xffffff, 1.2)
+  keyLight.position.set(ROOM.width / 2, ROOM.ceilingH, -6)
+  keyLight.target.position.set(ROOM.width / 2, ROOM.eyeLevel, 0)
+  scene.add(keyLight)
+  scene.add(keyLight.target)
+
+  // Overhead fill — lifts everything evenly
+  const overhead = new THREE.DirectionalLight(0xfff8f0, 0.8)
+  overhead.position.set(ROOM.width / 2, ROOM.ceilingH + 2, ROOM.depth / 2)
   overhead.target.position.set(ROOM.width / 2, 0, ROOM.depth / 2)
   scene.add(overhead)
   scene.add(overhead.target)
 
-  // Key light from south-east — brightens south + east walls
-  const keyLight = new THREE.DirectionalLight(0xfff8f0, 0.5)
-  keyLight.position.set(ROOM.width + 4, ROOM.ceilingH + 2, -4)
-  keyLight.target.position.set(ROOM.width / 2, ROOM.eyeLevel, ROOM.depth / 2)
-  scene.add(keyLight)
-  scene.add(keyLight.target)
+  // Side fill — keeps east/west readable
+  const sideLight = new THREE.DirectionalLight(0xfff0e8, 0.4)
+  sideLight.position.set(-6, 6, ROOM.depth / 2)
+  sideLight.target.position.set(ROOM.width / 2, ROOM.eyeLevel, ROOM.depth / 2)
+  scene.add(sideLight)
+  scene.add(sideLight.target)
 
-  // Fill from north-west — softly lifts the north + west walls out of full shadow
-  const fillLight = new THREE.DirectionalLight(0xf0f4ff, 0.2)
-  fillLight.position.set(-4, 6, ROOM.depth + 4)
-  fillLight.target.position.set(ROOM.width / 2, ROOM.eyeLevel, ROOM.depth / 2)
-  scene.add(fillLight)
-  scene.add(fillLight.target)
-
-  // Fluorescent ceiling spots — two rows, tight angle
+  // Fluorescent ceiling spots
   for (const zPos of [3.5, 10.0]) {
-    const spot = new THREE.SpotLight(0xfff8f0, 0.8)
+    const spot = new THREE.SpotLight(0xffffff, 1.2)
     spot.position.set(ROOM.width / 2, ROOM.ceilingH - 0.1, zPos)
     spot.target.position.set(ROOM.width / 2, 0, zPos)
-    spot.angle = Math.PI / 3
-    spot.penumbra = 0.6
-    spot.decay = 1.5
+    spot.angle = Math.PI / 2.5
+    spot.penumbra = 0.5
+    spot.decay = 1.2
     scene.add(spot)
     scene.add(spot.target)
   }

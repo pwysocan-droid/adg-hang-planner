@@ -33,7 +33,7 @@ export function Viewer3D() {
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setSize(w, h)
-    renderer.setClearColor(0xf4f2ec)
+    renderer.setClearColor(0xfaf9f6)
     container.appendChild(renderer.domElement)
     rendererRef.current = renderer
 
