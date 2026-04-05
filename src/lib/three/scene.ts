@@ -4,12 +4,12 @@ import { ROOM } from '../room'
 export function buildRoom(scene: THREE.Scene) {
   // MeshBasicMaterial = unlit, exact color always — no lighting math washing things out
   // Each surface tuned to read as a distinct plane
-  const southMat  = new THREE.MeshBasicMaterial({ color: 0xf4f2ec }) // hero — warm white
-  const northMat  = new THREE.MeshBasicMaterial({ color: 0xb8b4ac }) // back wall — clearly dark
-  const eastMat   = new THREE.MeshBasicMaterial({ color: 0xdedbd4 }) // side — medium
-  const westMat   = new THREE.MeshBasicMaterial({ color: 0xe6e3dc }) // side — slightly lighter
-  const floorMat  = new THREE.MeshBasicMaterial({ color: 0x888480 }) // dark polished concrete
-  const ceilMat   = new THREE.MeshBasicMaterial({ color: 0xfafaf8 }) // white ceiling
+  const southMat  = new THREE.MeshBasicMaterial({ color: 0xf8f7f2 }) // hero — near white
+  const northMat  = new THREE.MeshBasicMaterial({ color: 0xcecbc4 }) // back wall
+  const eastMat   = new THREE.MeshBasicMaterial({ color: 0xedeae4 }) // side
+  const westMat   = new THREE.MeshBasicMaterial({ color: 0xf0ede7 }) // side
+  const floorMat  = new THREE.MeshBasicMaterial({ color: 0xa8a49e }) // polished concrete
+  const ceilMat   = new THREE.MeshBasicMaterial({ color: 0xfcfcfa }) // white ceiling
 
   // Floor
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(ROOM.width, ROOM.depth), floorMat)
@@ -58,12 +58,12 @@ export function buildRoom(scene: THREE.Scene) {
 
   // Column — per-face basic materials, south face bright, north dark
   const colFaceMats = [
-    new THREE.MeshBasicMaterial({ color: 0xd4d0c8 }), // +x east face
-    new THREE.MeshBasicMaterial({ color: 0xd8d4cc }), // -x west face
-    new THREE.MeshBasicMaterial({ color: 0xfafaf8 }), // +y top
-    new THREE.MeshBasicMaterial({ color: 0x888480 }), // -y bottom
-    new THREE.MeshBasicMaterial({ color: 0xeeeae2 }), // +z south face — hero
-    new THREE.MeshBasicMaterial({ color: 0xb8b4ac }), // -z north face — blends with back wall
+    new THREE.MeshBasicMaterial({ color: 0xe0ddd6 }), // +x east face
+    new THREE.MeshBasicMaterial({ color: 0xe4e1da }), // -x west face
+    new THREE.MeshBasicMaterial({ color: 0xfcfcfa }), // +y top
+    new THREE.MeshBasicMaterial({ color: 0xa8a49e }), // -y bottom
+    new THREE.MeshBasicMaterial({ color: 0xf4f2ec }), // +z south face — bright
+    new THREE.MeshBasicMaterial({ color: 0xcecbc4 }), // -z north face
   ]
   const col = new THREE.Mesh(
     new THREE.BoxGeometry(ROOM.column.xEnd - ROOM.column.xStart, ROOM.ceilingH, ROOM.column.depth),
