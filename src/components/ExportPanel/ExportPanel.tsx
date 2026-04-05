@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useStore } from '../../store/useStore'
 import { serializePlacements, ftToDisplay } from '../../lib/placement'
 import { WALLS } from '../../lib/room'
@@ -13,15 +14,48 @@ const WALL_LABELS: Record<WallId, string> = {
   'north-right': 'NORTH WALL — RIGHT PANEL',
 }
 
+function copyToClipboard(text: string, onSuccess: () => void) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
+      // fallback
+      const ta = document.createElement('textarea')
+      ta.value = text
+      ta.style.position = 'fixed'
+      ta.style.opacity = '0'
+      document.body.appendChild(ta)
+      ta.select()
+      document.execCommand('copy')
+      document.body.removeChild(ta)
+      onSuccess()
+    })
+  } else {
+    const ta = document.createElement('textarea')
+    ta.value = text
+    ta.style.position = 'fixed'
+    ta.style.opacity = '0'
+    document.body.appendChild(ta)
+    ta.select()
+    document.execCommand('copy')
+    document.body.removeChild(ta)
+    onSuccess()
+  }
+}
+
 export function ExportPanel() {
   const { works, placements, curatorial_note } = useStore()
+  const [copied, setCopied] = useState<string | null>(null)
+
+  function flash(label: string) {
+    setCopied(label)
+    setTimeout(() => setCopied(null), 2000)
+  }
 
   function shareLink() {
     if (placements.length === 0) return
     const encoded = serializePlacements(placements)
     const url = new URL(window.location.href)
     url.searchParams.set('hang', encoded)
-    navigator.clipboard.writeText(url.toString())
+    copyToClipboard(url.toString(), () => flash('link'))
   }
 
   function hangSheet() {
@@ -51,7 +85,7 @@ export function ExportPanel() {
       lines.push('')
     }
 
-    navigator.clipboard.writeText(lines.join('\n'))
+    copyToClipboard(lines.join('\n'), () => flash('sheet'))
   }
 
   async function exportPdf() {
@@ -159,8 +193,8 @@ export function ExportPanel() {
           <span className={styles.heading}>EXPORT</span>
         </div>
         <div className={styles.actions}>
-          <button onClick={shareLink} disabled={!hasData}>Share link</button>
-          <button onClick={hangSheet} disabled={!hasData}>Hang sheet</button>
+          <button onClick={shareLink} disabled={!hasData}>{copied === 'link' ? 'Copied ✓' : 'Share link'}</button>
+          <button onClick={hangSheet} disabled={!hasData}>{copied === 'sheet' ? 'Copied ✓' : 'Hang sheet'}</button>
           <button onClick={exportPdf} disabled={!hasData}>Export PDF</button>
         </div>
       </div>
