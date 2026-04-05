@@ -37,6 +37,59 @@
   align-items: center;
 }
 
+.chaosRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--rule);
+}
+
+.chaosLabel {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.chaosSlider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 1px;
+  background: var(--rule);
+  outline: none;
+  cursor: pointer;
+}
+
+.chaosSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  background: var(--ink);
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.chaosSlider::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  background: var(--ink);
+  cursor: pointer;
+  border-radius: 0;
+  border: none;
+}
+
+.chaosValue {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  min-width: 100px;
+  text-align: right;
+}
+
 .error {
   font-size: 9px;
   color: var(--accent);

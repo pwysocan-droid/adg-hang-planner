@@ -8,6 +8,7 @@ interface AppState {
   selectedWorkId: string | null
   isGenerating: boolean
   error: string | null
+  chaos: number  // 0–10
 
   addWork: (work: Work) => void
   updateWork: (id: string, updates: Partial<Work>) => void
@@ -21,6 +22,7 @@ interface AppState {
   setSelectedWork: (id: string | null) => void
   setGenerating: (v: boolean) => void
   setError: (msg: string | null) => void
+  setChaos: (v: number) => void
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -30,6 +32,7 @@ export const useStore = create<AppState>((set) => ({
   selectedWorkId: null,
   isGenerating: false,
   error: null,
+  chaos: 0,
 
   addWork: (work) => set((s) => ({ works: [...s.works, work] })),
   updateWork: (id, updates) =>
@@ -60,4 +63,5 @@ export const useStore = create<AppState>((set) => ({
   setSelectedWork: (id) => set({ selectedWorkId: id }),
   setGenerating: (v) => set({ isGenerating: v }),
   setError: (msg) => set({ error: msg }),
+  setChaos: (v) => set({ chaos: v }),
 }))
