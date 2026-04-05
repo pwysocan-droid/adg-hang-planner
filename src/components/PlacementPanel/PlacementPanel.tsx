@@ -107,11 +107,9 @@ export function PlacementPanel() {
           <span className={styles.heading}>PLACEMENT</span>
         </div>
         <div className={styles.actions}>
-          {works.length === 0 && (
-            <button onClick={addPlaceholders}>
-              + Nocito placeholders
-            </button>
-          )}
+          <button onClick={addPlaceholders}>
+            + Nocito placeholders
+          </button>
           {placements.length > 0 && (
             <button onClick={() => generate(false)} disabled={isGenerating}>
               New idea
