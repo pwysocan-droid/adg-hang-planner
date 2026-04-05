@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import styles from './AccessGate.module.css'
 
-const PASSWORD = import.meta.env.VITE_ACCESS_PASSWORD as string | undefined
+// Comma-separated list of valid passwords, e.g. "jason,sarah,mike"
+const RAW = (import.meta.env.VITE_ACCESS_PASSWORD as string | undefined) ?? ''
+const PASSWORDS = RAW.split(',').map(p => p.trim()).filter(Boolean)
 
 interface Props {
   children: React.ReactNode
@@ -11,16 +13,17 @@ export function AccessGate({ children }: Props) {
   const [input, setInput] = useState('')
   const [error, setError] = useState(false)
   const [granted, setGranted] = useState(() => {
-    if (!PASSWORD) return true
-    return sessionStorage.getItem('adg_access') === PASSWORD
+    if (PASSWORDS.length === 0) return true
+    const saved = sessionStorage.getItem('adg_access') ?? ''
+    return PASSWORDS.includes(saved)
   })
 
   if (granted) return <>{children}</>
 
   function attempt(e: React.FormEvent) {
     e.preventDefault()
-    if (input === PASSWORD) {
-      sessionStorage.setItem('adg_access', input)
+    if (PASSWORDS.includes(input.trim())) {
+      sessionStorage.setItem('adg_access', input.trim())
       setGranted(true)
     } else {
       setError(true)
