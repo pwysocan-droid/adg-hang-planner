@@ -14,8 +14,8 @@ export const CAMERA_PRESETS: CameraPreset[] = [
   {
     id: 'overview',
     label: 'Overview',
-    position: new THREE.Vector3(ROOM.width / 2, 10, 16),
-    target: new THREE.Vector3(ROOM.width / 2, 3, 0),
+    position: new THREE.Vector3(ROOM.width / 2, 5.5, 5),
+    target: new THREE.Vector3(ROOM.width / 2, ROOM.eyeLevel, ROOM.depth),
   },
   {
     id: 'south',
@@ -38,9 +38,8 @@ export const CAMERA_PRESETS: CameraPreset[] = [
   {
     id: 'column',
     label: 'Column',
-    // Stand in front of the column south face, eye level, looking north at it
-    position: new THREE.Vector3((ROOM.column.xStart + ROOM.column.xEnd) / 2, ROOM.eyeLevel, ROOM.depth - ROOM.column.depth - 5),
-    target: new THREE.Vector3((ROOM.column.xStart + ROOM.column.xEnd) / 2, ROOM.eyeLevel, ROOM.depth - ROOM.column.depth),
+    position: new THREE.Vector3(ROOM.width / 2, 5.5, 5),
+    target: new THREE.Vector3(ROOM.width / 2, ROOM.eyeLevel, ROOM.depth),
   },
   {
     id: 'north-left',
@@ -67,7 +66,7 @@ export class OrbitController {
     private camera: THREE.PerspectiveCamera,
     private domElement: HTMLElement
   ) {
-    this.target = new THREE.Vector3(ROOM.width / 2, 3.5, 0)
+    this.target = new THREE.Vector3(ROOM.width / 2, ROOM.eyeLevel, ROOM.depth)
     this.updateSpherical()
     this.bind()
   }
