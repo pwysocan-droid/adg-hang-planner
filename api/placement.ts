@@ -78,8 +78,11 @@ Return exactly:
 
     const text: string = json.content?.[0]?.text ?? ''
 
+    // Strip markdown code fences if present
+    const cleaned = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim()
+
     try {
-      res.json(JSON.parse(text))
+      res.json(JSON.parse(cleaned))
     } catch {
       res.status(500).json({ error: 'Parse failed', raw: text })
     }
