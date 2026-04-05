@@ -193,8 +193,7 @@ export function ExportPanel() {
           <span className={styles.heading}>EXPORT</span>
         </div>
         <div className={styles.actions}>
-          <button onClick={shareLink} disabled={!hasData}>{copied === 'link' ? 'Copied ✓' : 'Share link'}</button>
-          <button onClick={hangSheet} disabled={!hasData}>{copied === 'sheet' ? 'Copied ✓' : 'Hang sheet'}</button>
+<button onClick={hangSheet} disabled={!hasData}>{copied === 'sheet' ? 'Copied ✓' : 'Hang sheet'}</button>
           <button onClick={exportPdf} disabled={!hasData}>Export PDF</button>
         </div>
       </div>
