@@ -41,8 +41,8 @@ export function Viewer3D() {
     sceneRef.current = scene
 
     const camera = new THREE.PerspectiveCamera(60, w / h, 0.1, 200)
-    camera.position.set(ROOM.width / 2, 8.5, 12)
-    camera.lookAt(ROOM.width / 2, 3.5, 0)
+    camera.position.set(ROOM.width / 2, 10, 16)
+    camera.lookAt(ROOM.width / 2, 3, 0)
     cameraRef.current = camera
 
     const controls = new OrbitController(camera, renderer.domElement)
