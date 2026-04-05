@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useStore } from '../../store/useStore'
-import { serializePlacements, ftToDisplay } from '../../lib/placement'
+import { ftToDisplay } from '../../lib/placement'
 import { WALLS } from '../../lib/room'
 import type { WallId } from '../../lib/room'
 import styles from './ExportPanel.module.css'
@@ -50,15 +50,7 @@ export function ExportPanel() {
     setTimeout(() => setCopied(null), 2000)
   }
 
-  function shareLink() {
-    if (placements.length === 0) return
-    const encoded = serializePlacements(placements)
-    const url = new URL(window.location.href)
-    url.searchParams.set('hang', encoded)
-    copyToClipboard(url.toString(), () => flash('link'))
-  }
-
-  function hangSheet() {
+function hangSheet() {
     const date = new Date().toLocaleDateString('en-US', {
       year: 'numeric', month: 'long', day: 'numeric',
     })
