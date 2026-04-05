@@ -91,7 +91,7 @@ export function buildRoom(scene: THREE.Scene) {
   col.position.set(
     (ROOM.column.xStart + ROOM.column.xEnd) / 2,
     ROOM.ceilingH / 2,
-    ROOM.column.depth / 2
+    ROOM.depth - ROOM.column.depth / 2  // flush with north wall
   )
   scene.add(col)
 

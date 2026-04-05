@@ -39,8 +39,8 @@ export const CAMERA_PRESETS: CameraPreset[] = [
   {
     id: 'column',
     label: 'Column',
-    position: new THREE.Vector3((ROOM.column.xStart + ROOM.column.xEnd) / 2, ROOM.eyeLevel, 6),
-    target: new THREE.Vector3((ROOM.column.xStart + ROOM.column.xEnd) / 2, ROOM.eyeLevel, ROOM.column.depth),
+    position: new THREE.Vector3((ROOM.column.xStart + ROOM.column.xEnd) / 2, ROOM.eyeLevel, ROOM.depth - ROOM.column.depth - 4),
+    target: new THREE.Vector3((ROOM.column.xStart + ROOM.column.xEnd) / 2, ROOM.eyeLevel, ROOM.depth - ROOM.column.depth),
   },
   {
     id: 'north-left',

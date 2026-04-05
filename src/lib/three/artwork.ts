@@ -52,11 +52,11 @@ export function wallTransform(placement: Placement, widthFt: number): {
         xAlong: x,
       }
     case 'column': {
-      // South face of column
-      const colSouthZ = ROOM.column.depth
+      // South face of column — flush with north wall, faces south into the space
+      const colSouthZ = ROOM.depth - ROOM.column.depth
       return {
-        position: new THREE.Vector3(ROOM.column.xStart + x + halfW, y, colSouthZ + 0.02),
-        rotationY: 0,
+        position: new THREE.Vector3(ROOM.column.xStart + x + halfW, y, colSouthZ - 0.02),
+        rotationY: Math.PI,  // face south (-Z) into the room
         xAlong: x,
       }
     }
